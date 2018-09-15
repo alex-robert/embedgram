@@ -1,0 +1,9 @@
+extends layout
+
+block content
+  main
+    .container
+      .gallery
+        each image in thumbs
+          .gallery-item
+            img(src=image class="gallery-image" alt="")
