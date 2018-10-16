@@ -14,12 +14,9 @@ app.get('/:profile', (req, res, next) => {
 
   let body = mcache.get(profile)
   if(body){
-    debug('this page is cached.')
     res.status(200).send(body)
     return
   }
-
-  debug('i am not here after beeing cached, never will be unless expired.')
 
   embed(profile)
     .then( (body) => {
