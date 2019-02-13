@@ -4,7 +4,6 @@ const cheerio = require('cheerio')
 const pug = require('pug')
 const path = require('path')
 
-const qError = 'div.error-container'
 const qFeed = 'body script'
 
 const getLastPosts = function (profileHandle) {
