@@ -9,7 +9,7 @@ app.enable('trust proxy')
 app.get('/favicon.ico', (req, res) => res.status(204))
 
 app.get('/:profile', (req, res, next) => {
-  profile = req.params.profile
+  const profile = req.params.profile
 
   let body = mcache.get(profile)
   if (body) {

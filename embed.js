@@ -25,7 +25,7 @@ const getLastPosts = function (profileHandle) {
 
       let thumbs = []
 
-      for (edge of edges) {
+      for (const edge of edges) {
         thumbs.push(edge.node.thumbnail_src)
       }
 
