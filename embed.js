@@ -1,4 +1,4 @@
-const debug = require('debug')('ebdgram')
+const debug = require('debug')('embedgram')
 const request = require('request-promise-native')
 const cheerio = require('cheerio')
 const pug = require('pug')
@@ -6,7 +6,10 @@ const path = require('path')
 
 const qFeed = 'body script'
 
-const getLastPosts = function (profileHandle) {
+const getLastPosts = async function (profileHandle, nbPosts = 12) {
+  if (nbPosts > 12) throw new Error('Cannot get more than 12 posts')
+  if (nbPosts % 3) nbPosts = (nbPosts - nbPosts % 3)
+
   return request('https://www.instagram.com/' + profileHandle)
     .then(response => {
       return cheerio.load(response)
@@ -22,23 +25,24 @@ const getLastPosts = function (profileHandle) {
       const data = JSON.parse(script)
       const edges = data.entry_data.ProfilePage[0].graphql.user.edge_owner_to_timeline_media.edges
 
-      let thumbs = []
+      const thumbs = []
 
-      for (const edge of edges) {
-        thumbs.push(edge.node.thumbnail_src)
+      for (let edgeIndex = 0; edgeIndex < nbPosts; edgeIndex++) {
+        thumbs.push(edges[edgeIndex].node.thumbnail_src)
       }
 
       return thumbs
     })
     .catch(error => {
       debug(error)
+      return []
     })
 }
 
 module.exports.lastPosts = getLastPosts
 
-module.exports = function (profileHandle) {
-  return getLastPosts(profileHandle).then((thumbs) => {
+module.exports = function (profileHandle, nbPosts = 12) {
+  return getLastPosts(profileHandle, nbPosts).then((thumbs) => {
     return pug.renderFile(path.join(__dirname, 'view/feed.pug'), {
       handle: profileHandle,
       thumbs: thumbs,

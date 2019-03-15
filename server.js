@@ -1,4 +1,4 @@
-const debug = require('debug')('ebdgram:server')
+const debug = require('debug')('embedgram:server')
 const express = require('express')
 const mcache = require('memory-cache')
 const embed = require('./embed')
@@ -23,7 +23,9 @@ app.get('/:profile', (req, res, next) => {
       res.status(200).send(body)
     })
     .catch(error => {
-      next(error)
+      res.status(500).send({
+        error: error.message
+      })
     })
 })
 
