@@ -8,7 +8,7 @@ const app = express()
 app.enable('trust proxy')
 app.get('/favicon.ico', (req, res) => res.status(204))
 
-app.get('/:profile', (req, res, next) => {
+app.get('/:profile', (req, res) => {
   const profile = req.params.profile
 
   let body = mcache.get(profile)
@@ -17,7 +17,7 @@ app.get('/:profile', (req, res, next) => {
     return
   }
 
-  embed(profile)
+  embed(profile, req.query.len || undefined)
     .then((body) => {
       mcache.put(profile, body, 3600 * 1000)
       res.status(200).send(body)

@@ -6,7 +6,7 @@ const path = require('path')
 
 const qFeed = 'body script'
 
-const getLastPosts = async function (profileHandle, nbPosts = 12) {
+const getLastPosts = function (profileHandle, nbPosts = 12) {
   if (nbPosts > 12) throw new Error('Cannot get more than 12 posts')
   if (nbPosts % 3) nbPosts = (nbPosts - nbPosts % 3)
 
@@ -25,11 +25,7 @@ const getLastPosts = async function (profileHandle, nbPosts = 12) {
       const data = JSON.parse(script)
       const edges = data.entry_data.ProfilePage[0].graphql.user.edge_owner_to_timeline_media.edges
 
-      const thumbs = []
-
-      for (let edgeIndex = 0; edgeIndex < nbPosts; edgeIndex++) {
-        thumbs.push(edges[edgeIndex].node.thumbnail_src)
-      }
+      const thumbs = edges.slice(0, nbPosts).map((edge) => edge.node.thumbnail_src)
 
       return thumbs
     })
