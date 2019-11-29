@@ -1,7 +1,7 @@
 const debug = require('debug')('embedgram:server')
 const express = require('express')
 const mcache = require('memory-cache')
-const embed = require('./embed')
+const { embed } = require('./embed')
 
 const app = express()
 
